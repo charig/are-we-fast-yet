@@ -287,7 +287,7 @@ JsonParser = (
 
     input ifNil: [ self error:'input nil'].
     index <= input length
-      ifTrue:  [ current := input charAt: index ]
+      ifTrue:  [ current := (input at: index) asString ]
       ifFalse: [ current := nil ]
   )
 

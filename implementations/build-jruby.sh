@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+#set -e
 SCRIPT_PATH=`dirname $0`
 source $SCRIPT_PATH/script.inc
 source $SCRIPT_PATH/config.inc

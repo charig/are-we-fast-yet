@@ -4,12 +4,10 @@ then
   exit 0
 fi
 
-set -e # make script fail on first error
+#set -e # make script fail on first error
 SCRIPT_PATH=`dirname $0`
 source $SCRIPT_PATH/script.inc
 source $SCRIPT_PATH/config.inc
-
-
 
 INFO Get Pharo VM
 cd $SCRIPT_PATH

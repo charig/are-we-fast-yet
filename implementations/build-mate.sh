@@ -4,13 +4,13 @@ SCRIPT_PATH=`dirname $0`
 source $SCRIPT_PATH/script.inc
 source $SCRIPT_PATH/config.inc
 
-check_for_crystal
-
-INFO Build Crystal Benchmarks
-pushd $SCRIPT_PATH/../benchmarks/Crystal
+INFO Build TruffleMATE
 if [ "$1" = "style" ]
 then
   exit 0
 else
-  ./build.sh
+  load_submodule $SCRIPT_PATH/TruffleMATE
+  pushd $SCRIPT_PATH/TruffleMATE
+  make clean; make
 fi
+OK TruffleMATE Build Completed.

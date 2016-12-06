@@ -5,7 +5,7 @@ below. This report was generated on `r Sys.time()`.
 
 ```{r load-scripts, echo=FALSE, include=FALSE}
 # load libraries, the data, and prepare it
-if (Sys.getenv("RSTUDIO") == "1") { setwd("/Users/smarr/Projects/PostDoc/FASTXX/are-we-fast-yet/report") }
+if (Sys.getenv("RSTUDIO") == "1") { setwd("/home/guido/Documents/Projects/are-we-fast-yet/report") }
 source("scripts/libraries.R", chdir=TRUE)
 opts_chunk$set(dev = 'png',
                dev.args=list(pointsize=10),
@@ -18,7 +18,9 @@ opts_chunk$set(dev = 'png',
 
 vm_names <- c("Java8U66"              = "Java",
               "SOMns-Enterprise"      = "SOMns",
-              "TruffleSOM-TOM-Enterprise" = "TruffleSOM",
+#              "TruffleSOM-TOM-Enterprise" = "TruffleSOMTOM",
+              "TruffleSOMMate-Enterprise" = "TruffleSOM",
+              "TruffleMate-Enterprise" = "TruffleMATE",
               "GraalJS"               = "Graal.js",
               "Node"                  = "Node.js",
               "Crystal"               = "Crystal",
@@ -30,29 +32,37 @@ vm_names <- c("Java8U66"              = "Java",
 
 
 vms_all  <- names(vm_names)
-vms_slow <- c("RBX314", "MRI23", "JRubyJ8", "Pharo")
+vms_slowJit  <- c("Pharo", "TruffleMate-Enterprise")
+vms_slow <- c("RBX314", "MRI23", "JRubyJ8")
 vms_fast <- c("Crystal", "GraalJS", "JRubyTruffleEnterprise",
               "Java8U66", "Node", "SOMns-Enterprise",
-              "TruffleSOM-TOM-Enterprise")
+              #"TruffleSOM-TOM-Enterprise",
+              "TruffleSOMMate-Enterprise")
 vms_truffle <- c("GraalJS", "JRubyTruffleEnterprise",
-                 "SOMns-Enterprise", "TruffleSOM-TOM-Enterprise")
+                 "SOMns-Enterprise", "TruffleSOM-TOM-Enterprise", "TruffleSOMMate-Enterprise")
 
-assert_that(all(sort(c(vms_slow, vms_fast)) == sort(vms_all))) ## sanity check
+vms_JIT <- append(vms_fast, vms_slowJit)
+vms_JIT <- setdiff(vms_JIT, c("Java8U66"))
 
-vm_colors <- brewer.pal(11, "Paired")  # to replace scale_fill_brewer(type = "qual", palette = "Paired")
+vms_JournalMateJSS <- c("TruffleSOMMate-Enterprise", "Pharo", "TruffleMate-Enterprise", "Node")
+
+assert_that(all(sort(c(vms_slow, vms_fast, vms_slowJit)) == sort(vms_all))) ## sanity check
+
+vm_colors <- brewer.pal(12, "Paired")  # to replace scale_fill_brewer(type = "qual", palette = "Paired")
 names(vm_colors) <- vm_names
 
 
-data <- load_data_file("data/benchmark.data.bz2")
-data_p <- load_data_file("data/pharo.data")
-data <- rbind(data, data_p)
+data <- load_data_file("data/benchmark.data")
+#data_p <- load_data_file("data/pharo.data")
+#data <- rbind(data, data_p)
 data <- droplevels(subset(data, Benchmark != "DeltaBlueV8" & VM %in% vms_all,
                           select = c(Value, Unit, Benchmark, VM, Iteration)))
 
 data_fast_vms      <- droplevels(subset(data, Iteration >= 1500 & Iteration < 2500 & VM %in% vms_fast))
 data_very_slow_vms <- droplevels(subset(data, VM %in% vms_slow & VM != "JRubyJ8"))
 data_slow_vms      <- droplevels(subset(data, Iteration >= 100 & (VM == "JRubyJ8" | VM == "Pharo")))
-data <- rbind(data_fast_vms, data_slow_vms, data_very_slow_vms)
+data_slow_vms2    <- droplevels(subset(data, Iteration >= 1500 & Iteration < 2500 & VM == "TruffleMate-Enterprise"))
+data <- rbind(data_fast_vms, data_slow_vms, data_very_slow_vms, data_slow_vms2)
 
 
 norm <- ddply(data, ~ Benchmark, transform,
@@ -120,9 +130,10 @@ overview_box_plot <- function(stats, vms, prepare_data = NULL, pre_plot = NULL) 
   plot <- plot +
     geom_boxplot(outlier.size = 0.5) + #fill=get_color(5, 7)
     theme_bw() + theme_simple(font_size = 8) +
-    theme(axis.text.x = element_text(angle= 90, vjust=0.5, hjust=1), legend.position="none") +
+    theme(axis.text.x = element_text(angle= 90, vjust=0.5, hjust=1), legend.position="none", plot.title = element_text(hjust = 0.5), aspect.ratio=0.5) +
     #scale_y_log10(breaks=c(1,2,3,10,20,30,50,100,200,300,500,1000)) + #limit=c(0,30), breaks=seq(0,100,5), expand = c(0,0)
-    ggtitle("Runtime Factor, normalized to Java\n(lower is better)") + coord_flip() + xlab("") +
+    #+ coord_flip()
+    ggtitle("Runtime Factor, normalized to Java (lower is better)") + xlab("") +
     scale_fill_manual(values = col_values)
   plot
 }
@@ -141,12 +152,9 @@ our set of benchmarks within a factor of 2 to 3 on average. To allow for a more
 detailed assessment of these *fast* language implementations, we exclude slower
 ones from the following plot.
 
-```{r fast-langs-overview, fig.width=8, fig.height=3}
-p <- overview_box_plot(stats, vms_fast, pre_plot = function (p) {
-  p + geom_hline(aes(yintercept=1), colour="#cccccc", linetype="dashed") +
-      geom_hline(aes(yintercept=2), colour="#cccccc", linetype="dashed") +
-      geom_hline(aes(yintercept=3), colour="#cccccc", linetype="dashed") })
-p + scale_y_continuous(limit=c(0,13), breaks = c(1, 2, 3, 4, 6, 8, 10, 12))
+```{r fast-langs-overview, fig.width=15, fig.height=3}
+p <- overview_box_plot(stats, vms_JournalMateJSS)
+p + scale_y_continuous(limit=c(0,18), breaks = c(1, 2, 3, 4, 6, 8, 10, 12, 14), na.value = 50)
 ```
 
 ##### All Language Implementations
@@ -156,8 +164,8 @@ to Java on our benchmarks. The following plot include all of the
 implementations.
 
 ```{r all-langs-overview, fig.width=8, fig.height=3}
-p <- overview_box_plot(stats, vms_all)
-p + scale_y_continuous(breaks = c(0, 5, seq(from=10, by=10, to=100)))
+p <- overview_box_plot(stats, vms_JIT)
+p + scale_y_continuous(breaks = c(0, 10, seq(from=10, by=20, to=30)))
 ```
 
 ##### Performance Overview Data
