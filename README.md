@@ -51,8 +51,8 @@ here. However, by focusing on one aspect, we know exactly what is compared.
 ## Current Status
 
 Currently, we have 14 benchmarks ported to six different languages, including
-[Crystal], Java, JavaScript, Ruby, [SOM Smalltalk][SOM], and [SOMns][1] (a
-[Newspeak implementation][2]).
+[Crystal], Java, JavaScript, Ruby, [SOM Smalltalk][SOM], [SOMns][1] (a
+[Newspeak implementation][2]), and [Mate][TruffleMate].
 
 The graph below shows the results for the
 different implementations after warmup, to ensure peak performance is reported:
@@ -215,12 +215,13 @@ benchmarks.
  [3]: http://stefan-marr.de/papers/dls-marr-et-al-cross-language-compiler-benchmarking-are-we-fast-yet/
  [4]: http://stefan-marr.de/downloads/dls16-marr-et-al-cross-language-compiler-benchmarking-are-we-fast-yet.pdf
 
- [CD]:        https://www.cs.purdue.edu/sss/projects/cdx/
- [CDjs]:      https://github.com/WebKit/webkit/tree/master/PerformanceTests/JetStream/cdjs
- [DeltaBlue]: http://www.wolczko.com/java_benchmarking.html
- [Havlak]:    https://days2011.scala-lang.org/sites/days2011/files/ws3-1-Hundt.pdf
- [Json]:      https://github.com/ralfstx/minimal-json
- [Richards]:  http://www.cl.cam.ac.uk/~mr10/Bench.html
- [SOM]:       http://som-st.github.io/
- [CLBG]:      http://benchmarksgame.alioth.debian.org
- [Crystal]:   http://crystal-lang.org/
+ [CD]:          https://www.cs.purdue.edu/sss/projects/cdx/
+ [CDjs]:        https://github.com/WebKit/webkit/tree/master/PerformanceTests/JetStream/cdjs
+ [DeltaBlue]:   http://www.wolczko.com/java_benchmarking.html
+ [Havlak]:      https://days2011.scala-lang.org/sites/days2011/files/ws3-1-Hundt.pdf
+ [Json]:        https://github.com/ralfstx/minimal-json
+ [Richards]:    http://www.cl.cam.ac.uk/~mr10/Bench.html
+ [SOM]:         http://som-st.github.io/
+ [CLBG]:        http://benchmarksgame.alioth.debian.org
+ [Crystal]:     http://crystal-lang.org/
+ [TruffleMate]: https://github.com/charig/TruffleMATE
