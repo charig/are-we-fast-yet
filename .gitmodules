@@ -1,15 +1,3 @@
-[submodule "implementations/TruffleSOM"]
-	path = implementations/TruffleSOM
-	url = https://github.com/SOM-st/TruffleSOM.git
-[submodule "implementations/SOMns"]
-	path = implementations/SOMns
-	url = https://github.com/smarr/SOMns.git
-[submodule "implementations/JRuby"]
-	path = implementations/JRuby
-	url = https://github.com/jruby/jruby.git
-[submodule "implementations/TruffleSOM-TOM"]
-	path = implementations/TruffleSOM-TOM
-	url = https://github.com/smarr/TruffleSOM.git
 [submodule "implementations/graal-core"]
 	path = implementations/graal-core
 	url = https://github.com/graalvm/graal-core.git

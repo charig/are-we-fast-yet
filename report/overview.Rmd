@@ -153,7 +153,12 @@ detailed assessment of these *fast* language implementations, we exclude slower
 ones from the following plot.
 
 ```{r fast-langs-overview, fig.width=15, fig.height=3}
-p <- overview_box_plot(stats, vms_JournalMateJSS)
+p <- overview_box_plot(stats, vms_JournalMateJSS, pre_plot = function (p) {
+  p + geom_hline(aes(yintercept=1), colour="#cccccc", linetype="dashed") +
+      geom_hline(aes(yintercept=2), colour="#cccccc", linetype="dashed") +
+      geom_hline(aes(yintercept=3), colour="#cccccc", linetype="dashed") })
+-p + scale_y_continuous(limit=c(0,13), breaks = c(1, 2, 3, 4, 6, 8, 10, 12))
+
 p + scale_y_continuous(limit=c(0,18), breaks = c(1, 2, 3, 4, 6, 8, 10, 12, 14), na.value = 50)
 ```
 
