@@ -45,7 +45,7 @@ Harness = (
 
     run runBenchmark.
     run printTotal.
-    Smalltalk exit: 0
+    Computer isSqueakNOS ifFalse: [ Smalltalk exit: 0 ]
   )
   
   printUsage = (

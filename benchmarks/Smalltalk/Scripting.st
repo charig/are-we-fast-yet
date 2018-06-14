@@ -297,6 +297,7 @@ detectAvailableMechanismForStdout
 	"The preferred means is to use the stdout file handle.
 	 Will try to fall back on the RoarVM primitive if necessary."
 	| cls |
+	Computer isSqueakNOS ifTrue: [ PrintTarget := Computer current defaultSerialPort. ^self ].
 	(FileStream respondsTo: #stdout)
 		ifTrue: [
 			PrintTarget := FileStream stdout.
