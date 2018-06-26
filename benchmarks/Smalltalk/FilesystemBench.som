@@ -1,0 +1,22 @@
+FilesystemBench = Benchmark (
+  benchmark = (
+    | stream |
+	  stream := (FileSystem disk workingDirectory / 'fileBenchData' / 'benchOutput.txt') writeStream.
+	  (FileSystem disk workingDirectory / 'fileBenchData') asFileReference 
+		  allFiles do: [ :file | 
+			  (file fullName endsWith: '.txt') ifFalse: [   
+				  stream nextPutAll: file contents. 
+			  ] 
+		  ].
+	  stream close.
+	  ^(FileSystem disk workingDirectory / 'fileBenchData' / 'benchOutput.txt')
+	)
+  
+  directory = (
+    ^ FileSystem disk workingDirectory
+  )
+
+  verifyResult: result = (
+    ^ result contents lines size = 100
+  )
+)
