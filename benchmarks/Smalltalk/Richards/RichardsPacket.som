@@ -5,7 +5,8 @@ part of Mario Wolczko's DeltaBlue and Richards collection.
 License details:
   http://web.archive.org/web/20050825101121/http://www.sunlabs.com/people/mario/java_benchmarking/index.html
 "
-Packet = RBObject (
+
+RichardsPacket = RBObject (
   | link identity kind datum data |
 
   data  = ( ^ data )

@@ -110,7 +110,7 @@ Scheduler = RBObject (
   )
 
   createPacket: link identity: identity kind: kind = (
-    ^ Packet create:   link
+    ^ RichardsPacket create:   link
              identity: identity
              kind:     kind
   )
