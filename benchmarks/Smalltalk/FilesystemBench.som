@@ -1,15 +1,26 @@
 FilesystemBench = Benchmark (
   benchmark = (
     | stream |
-	  stream := (FileSystem disk workingDirectory / 'fileBenchData' / 'benchOutput.txt') writeStream.
-	  (FileSystem disk workingDirectory / 'fileBenchData') asFileReference 
-		  allFiles do: [ :file | 
-			  (file fullName endsWith: '.txt') ifFalse: [   
-				  stream nextPutAll: file contents. 
-			  ] 
-		  ].
-	  stream close.
-	  ^(FileSystem disk workingDirectory / 'fileBenchData' / 'benchOutput.txt')
+	  Computer isSqueakNOS ifTrue:[
+			stream := (Computer current primaryFilesystem root newFilenamed: 'a.txt') openForWrite.
+			(Computer current primaryFilesystem directoriesFor: 
+				Computer current primaryFilesystem root) second files do: [ :file | 
+					(file name endsWith: '.txt') ifFalse: [   
+						stream nextPutAll: file contents. 
+					].
+			stream close.
+			^(Computer current primaryFilesystem root newFilenamed: 'a.txt') openForRead contents.		 	
+		] ifFalse :[
+			stream := (FileSystem disk workingDirectory / 'fileBenchData' / 'benchOutput.txt') writeStream.
+			(FileSystem disk workingDirectory / 'fileBenchData') asFileReference 
+				allFiles do: [ :file | 
+					(file fullName endsWith: '.txt') ifFalse: [   
+						stream nextPutAll: file contents. 
+					] 
+				].
+			stream close.
+			^(FileSystem disk workingDirectory / 'fileBenchData' / 'benchOutput.txt')
+		]
 	)
   
   directory = (
