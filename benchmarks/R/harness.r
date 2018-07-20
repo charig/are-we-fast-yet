@@ -1,10 +1,3 @@
-total = 0
-  
-loadBenchmark <- function(name) {
-    filename = paste(paste("./", lowercase(name), sep=""), ".r", sep = "");
-    source(filename);
-}
-
 innerBenchmarkLoop.default <- function(class, iterations) {
   for (i in 1:iterations) {
     if (!verifyResult(execute(), iterations)) {
@@ -19,7 +12,8 @@ innerBenchmarkLoop <- function(x, ...) {
 }
 
 doRuns <- function(name, iterations, innerIterations) {
-  class(name) = name
+  total <- 0
+  class(name) = tolower(name)
   for (i in 1:iterations) {
     startTime =  Sys.time()
     if (!innerBenchmarkLoop(name, innerIterations)) {
@@ -54,7 +48,6 @@ run <- function(args) {
   source(paste(paste("./", tolower(name), sep = ""), ".r", sep = ""))
   
   total = as.numeric(doRuns(name, numIterations, innerIterations));
-
   cat(paste(paste(name, ": iterations=", sep=""), numIterations, sep=""))
   cat(paste(" average:", round(total / numIterations)))
   cat(paste(paste(" us total:", round(total)), "us\n\n", sep=""))
