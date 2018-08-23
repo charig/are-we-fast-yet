@@ -20,7 +20,7 @@ doRuns <- function(name, iterations, innerIterations) {
       stop ("Benchmark failed with incorrect result")
     }
     endTime <- Sys.time()
-    runTime = (as.numeric(endTime) - as.numeric(startTime)) * 1000 
+    runTime = (as.numeric(endTime) - as.numeric(startTime)) * 1000000 
 
     cat(paste(paste(paste(name, ": iterations=1 runtime:", sep = ""), 
             round(runTime)), "us\n", sep = ""))
@@ -49,10 +49,10 @@ run <- function(args) {
   
   total = as.numeric(doRuns(name, numIterations, innerIterations));
   cat(paste(paste(name, ": iterations=", sep=""), numIterations, sep=""))
-  cat(paste(" average:", round(total / numIterations)))
-  cat(paste(paste(" us total:", round(total)), "us\n\n", sep=""))
-  cat("\n")
-  cat(paste(paste("Total Runtime:", total), "us\n\n", sep=""))
+  cat(paste("; average:", round(total / numIterations)))
+  cat(paste(paste(" us; total:", round(total)), "us\n\n", sep=""))
+  #cat("\n")
+  #cat(paste(paste("Total Runtime:", round(total)), "us\n\n", sep=""))
 }
 
 printUsage <- function() {
